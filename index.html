@@ -1,0 +1,179 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#102b28">
+  <meta name="description" content="ScoutPro — pencatatan dan analitik performa pemain sepak bola.">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="assets/icon.svg" type="image/svg+xml">
+  <title>ScoutPro | Scouting Analytics</title>
+  <style>
+    :root{--green:#0c9b64;--dark:#102b28;--ink:#18332b;--muted:#6c7c77;--bg:#f2f6f4;--line:#dfe9e4;--white:#fff;--red:#df4c4c}
+    *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:15px system-ui,-apple-system,Segoe UI,sans-serif}
+    button,input,select{font:inherit}button{border:0;border-radius:12px;padding:12px 14px;background:var(--green);color:#fff;font-weight:750;cursor:pointer}
+    button.secondary{background:#e6f4ed;color:#176044}button.outline{background:#fff;color:var(--ink);border:1px solid var(--line)}
+    input,select{width:100%;padding:12px;border:1px solid var(--line);border-radius:10px;background:#fff;color:var(--ink)}
+    label{font-size:12px;color:var(--muted);font-weight:750;display:block;margin-bottom:5px}
+    header{background:var(--dark);color:white;padding:15px max(16px,calc((100vw - 1120px)/2));display:flex;align-items:center;justify-content:space-between;gap:12px}
+    .brand{display:flex;align-items:center;gap:10px;font-weight:900;font-size:21px}.logo{width:38px;height:38px;border-radius:12px;background:#1ab57a;display:grid;place-items:center;font-size:22px}
+    .sub{font-size:11px;color:#b6d5c9;font-weight:500}.status{font-size:11px;color:#c4e7d7}
+    main{max-width:1120px;margin:auto;padding:20px 15px 100px}.hero{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:16px}.hero h1{font-size:25px;letter-spacing:-.7px;margin:0 0 4px}.hero p{color:var(--muted);margin:0;font-size:13px}
+    .panel{background:white;border:1px solid var(--line);border-radius:17px;padding:16px;margin:13px 0;box-shadow:0 6px 20px #17392c08}
+    .panel h2{font-size:16px;margin:0 0 5px}.hint{font-size:12px;color:var(--muted);margin:0 0 13px}
+    .grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.field{min-width:0}.wide{grid-column:1/-1}
+    .tabs{display:flex;gap:7px;overflow:auto;padding:2px 0 9px}.tabs button{white-space:nowrap;background:#e5eee9;color:#345349}.tabs button.active{background:var(--dark);color:white}
+    .metrics{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.metric{background:#f6faf8;border:1px solid #e8f0ec;border-radius:12px;padding:12px}.metric small{color:var(--muted);display:block}.metric strong{font-size:24px;display:block;margin:3px 0}.metric em{font-style:normal;font-size:11px;color:var(--green)}
+    .player-list{display:flex;gap:8px;flex-wrap:wrap}.player{background:#f6f9f7;color:var(--ink);border:1px solid var(--line);padding:10px 11px;border-radius:10px}.player.active{background:#dff5eb;border-color:#63c99a;color:#08784c}
+    .actiongrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.action{background:#f7faf8;color:var(--ink);border:1px solid var(--line);min-height:78px;text-align:left;display:flex;flex-direction:column;justify-content:space-between}.action span{font-size:20px}.action small{color:var(--muted);font-weight:550}.action:active{transform:scale(.98);background:#dff5eb}
+    .row{display:flex;align-items:center;justify-content:space-between;gap:10px}.badge{border-radius:30px;padding:5px 9px;background:#e5f7ee;color:#08784c;font-size:11px;font-weight:800}.notice{background:#fff8e6;border:1px solid #f1dfae;color:#78551a;border-radius:12px;padding:12px;font-size:12px}
+    .listitem{padding:10px 0;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:9px}.listitem:last-child{border:0}.dot{width:34px;height:34px;border-radius:10px;background:#e2f5ea;display:grid;place-items:center}.listitem div:nth-child(2){flex:1}.listitem b{font-size:13px;display:block}.listitem small{font-size:11px;color:var(--muted)}
+    .hidden{display:none!important}.empty{color:var(--muted);text-align:center;padding:20px}.bottomnav{position:fixed;bottom:0;left:0;right:0;z-index:5;background:#fff;border-top:1px solid var(--line);display:grid;grid-template-columns:repeat(4,1fr);padding:7px 5px max(7px,env(safe-area-inset-bottom));gap:4px}.bottomnav button{background:transparent;color:var(--muted);padding:7px 2px;font-size:10px}.bottomnav button.active{background:#e5f7ee;color:#08784c}.bottomnav span{display:block;font-size:18px;margin-bottom:2px}
+    .toast{position:fixed;bottom:85px;left:50%;transform:translateX(-50%);background:var(--dark);color:white;padding:12px 16px;border-radius:12px;max-width:90%;z-index:10;box-shadow:0 5px 25px #0002}
+    .smallbtn{padding:8px 10px;font-size:12px}.score{font-weight:900;font-size:23px}.onlinehint{font-size:11px;color:var(--muted)}
+    @media(min-width:760px){main{padding-top:28px}.layout{display:grid;grid-template-columns:1.1fr .9fr;gap:14px}.layout .panel{margin:0 0 14px}.actiongrid{grid-template-columns:repeat(3,minmax(0,1fr))}.metrics{grid-template-columns:repeat(3,minmax(0,1fr))}.bottomnav{position:sticky;bottom:0;max-width:1120px;margin:auto;border:1px solid var(--line);border-radius:15px;box-shadow:0 5px 20px #0001}.wideDesktop{grid-column:1/-1}}
+
+    /* FIFA-inspired player performance dashboard */
+    .fifa-shell{background:linear-gradient(135deg,#101b2b 0%,#172d3a 55%,#0c493d 100%);color:#f5f7f8;border:1px solid #263f4d;border-radius:20px;padding:18px;overflow:hidden;position:relative}
+    .fifa-shell:after{content:"";position:absolute;right:-60px;top:-95px;width:260px;height:260px;border:1px solid #ffffff12;border-radius:50%;box-shadow:0 0 0 28px #ffffff06,0 0 0 58px #ffffff04;pointer-events:none}
+    .fifa-kicker{color:#a8f05a;font-size:10px;letter-spacing:2px;font-weight:900;text-transform:uppercase}
+    .fifa-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;position:relative;z-index:1}
+    .fifa-head h2{font-size:23px;letter-spacing:-.8px;margin:4px 0;color:#fff}
+    .fifa-head p{color:#b4c5ce;font-size:12px;margin:0}
+    .fifa-chip{background:#a8f05a;color:#152a28;border-radius:6px;padding:6px 9px;font-size:10px;font-weight:950;white-space:nowrap}
+    .fifa-select{max-width:300px;margin:15px 0 0;background:#1d3442;color:#fff;border:1px solid #3b5664}
+    .fifa-playerhero{display:grid;grid-template-columns:110px minmax(0,1fr) auto;gap:14px;align-items:center;margin-top:17px;position:relative;z-index:1}
+    .fifa-playercard{height:132px;background:linear-gradient(155deg,#c9f58d,#78c65d 60%,#3c8b66);clip-path:polygon(12% 0,88% 0,100% 12%,93% 86%,50% 100%,7% 86%,0 12%);display:flex;flex-direction:column;align-items:center;justify-content:center;color:#18352d;text-align:center;padding:8px}
+    .fifa-rating{font-size:36px;font-weight:1000;line-height:1}
+    .fifa-position{font-size:12px;font-weight:950;margin-top:2px}
+    .fifa-avatar{font-size:31px;margin:2px 0}
+    .fifa-playername{font-size:21px;line-height:1.1;font-weight:950;letter-spacing:-.5px;overflow-wrap:anywhere}
+    .fifa-playerinfo{color:#b4c5ce;font-size:11px;margin-top:7px}
+    .fifa-overall{text-align:right;min-width:72px}.fifa-overall strong{font-size:35px;display:block;line-height:1;color:#a8f05a}.fifa-overall small{font-size:9px;letter-spacing:1.5px;color:#b4c5ce;font-weight:900}
+    .fifa-statgrid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:17px;position:relative;z-index:1}
+    .fifa-stat{background:#ffffff0b;border:1px solid #ffffff14;border-radius:10px;padding:11px}
+    .fifa-stat span{display:block;color:#b4c5ce;font-size:10px;font-weight:700}
+    .fifa-stat strong{display:block;color:#fff;font-size:23px;line-height:1.2;margin:3px 0}
+    .fifa-stat em{font-size:9px;font-style:normal;color:#a8f05a}
+    .fifa-sectiontitle{display:flex;justify-content:space-between;align-items:center;gap:8px;margin:20px 0 10px}
+    .fifa-sectiontitle h3{margin:0;color:#fff;font-size:13px;letter-spacing:.5px;text-transform:uppercase}
+    .fifa-sectiontitle span{font-size:10px;color:#9fb2bd}
+    .fifa-attributes{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+    .fifa-attr{display:grid;grid-template-columns:65px 1fr 27px;align-items:center;gap:8px;font-size:11px;color:#d6e0e5}
+    .fifa-track{height:6px;background:#ffffff17;border-radius:9px;overflow:hidden}
+    .fifa-fill{height:100%;background:linear-gradient(90deg,#65dca0,#b4f15a);border-radius:9px}
+    .fifa-attr b{text-align:right;color:#fff;font-size:12px}
+    .fifa-compare{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+    .fifa-comparebox{background:#ffffff09;border:1px solid #ffffff15;border-radius:12px;padding:12px}
+    .fifa-comparebox strong{font-size:22px;color:#a8f05a;display:block}
+    .fifa-comparebox small{color:#b4c5ce;font-size:10px}
+    .fifa-rank{display:grid;grid-template-columns:28px 1fr auto;gap:10px;align-items:center;padding:10px 0;border-bottom:1px solid #ffffff14}
+    .fifa-rank:last-child{border-bottom:0}
+    .fifa-ranknum{font-weight:950;color:#a8f05a;font-size:15px}
+    .fifa-rank b{display:block;font-size:12px;color:#fff}
+    .fifa-rank small{display:block;font-size:10px;color:#b4c5ce;margin-top:3px}
+    .fifa-rankscore{font-size:17px;font-weight:950;color:#a8f05a;text-align:right}
+    .fifa-empty{padding:22px;text-align:center;color:#b4c5ce;font-size:12px}
+    .fifa-shell .fifa-export{background:#a8f05a;color:#142a26}
+    @media(max-width:520px){.fifa-shell{padding:14px}.fifa-playerhero{grid-template-columns:84px minmax(0,1fr);gap:10px}.fifa-playercard{height:112px}.fifa-rating{font-size:30px}.fifa-overall{grid-column:1/-1;display:flex;align-items:center;justify-content:flex-end;gap:8px}.fifa-overall strong{font-size:24px}.fifa-statgrid{grid-template-columns:repeat(2,minmax(0,1fr))}.fifa-attributes{grid-template-columns:1fr}.fifa-head h2{font-size:20px}}
+
+  </style>
+</head>
+<body>
+<header>
+  <div class="brand"><div class="logo">⚽</div><div>ScoutPro<div class="sub">Better Data. Better Decisions.</div></div></div>
+  <div style="text-align:right"><div class="status" id="syncStatus">● Mode lokal</div><button class="outline smallbtn" id="installBtn" hidden>Pasang aplikasi</button></div>
+</header>
+<main>
+  <div class="hero"><div><h1 id="pageTitle">Pencatatan Pertandingan</h1><p>Statistik talenta SSB dan tim tarkam, langsung dari lapangan.</p></div><span class="badge" id="pendingBadge">0 antrean</span></div>
+  <nav class="tabs" aria-label="Navigasi utama">
+    <button class="active" data-page="record">Catat Aksi</button><button data-page="players">Pemain</button><button data-page="stats">Statistik</button><button data-page="settings">Koneksi</button>
+  </nav>
+
+  <section id="page-record">
+    <div class="panel">
+      <h2>Detail pertandingan</h2><p class="hint">Buat sesi baru sebelum peluit awal.</p>
+      <div class="grid">
+        <div class="field"><label for="matchName">Nama pertandingan / latihan</label><input id="matchName" placeholder="Contoh: SSB Garuda vs SSB Tunas"></div>
+        <div class="field"><label for="matchType">Kategori</label><select id="matchType"><option>SSB</option><option>Tarkam</option><option>Latihan</option></select></div>
+        <div class="field"><label for="homeTeam">Tim A</label><input id="homeTeam" placeholder="Nama tim"></div>
+        <div class="field"><label for="awayTeam">Tim B</label><input id="awayTeam" placeholder="Nama lawan"></div>
+        <div class="field"><label for="matchDate">Tanggal</label><input id="matchDate" type="date"></div>
+        <div class="field"><label for="half">Babak</label><select id="half"><option value="1">Babak 1</option><option value="2">Babak 2</option><option value="ET">Extra time</option></select></div>
+        <div class="field wide"><button id="startMatch" style="width:100%">Mulai / perbarui sesi</button></div>
+      </div>
+      <div class="row" style="margin-top:14px"><div><div class="hint" style="margin:0">Skor tercatat pada sesi ini</div><div class="score"><span id="scoreA">0</span> — <span id="scoreB">0</span></div></div><button class="secondary smallbtn" id="finishMatch">Akhiri sesi</button></div>
+    </div>
+    <div class="layout">
+      <div>
+        <div class="panel"><div class="row"><h2>1. Pilih pemain</h2><span class="badge" id="selectedName">Belum dipilih</span></div><p class="hint">Tambahkan pemain di menu Pemain jika belum tersedia.</p><div id="playerChoices" class="player-list"></div></div>
+        <div class="panel"><h2>2. Catat aksi pemain</h2><p class="hint">Tekan tombol tepat setelah aksi terjadi. Setiap tekan membuat satu catatan.</p>
+          <div class="actiongrid" id="actionButtons">
+            <button class="action" data-action="pass_ok"><span>✓</span>Passing berhasil<small>Umpan akurat</small></button>
+            <button class="action" data-action="pass_fail"><span>↗</span>Passing gagal<small>Umpan tidak akurat</small></button>
+            <button class="action" data-action="shot_on"><span>🎯</span>Shooting tepat<small>Tepat sasaran</small></button>
+            <button class="action" data-action="shot_off"><span>⚽</span>Shooting meleset<small>Meleset / diblok</small></button>
+            <button class="action" data-action="goal"><span>🥅</span>Gol<small>Gol pemain</small></button>
+            <button class="action" data-action="chance"><span>✨</span>Peluang dibuat<small>Key pass / peluang</small></button>
+            <button class="action" data-action="assist"><span>🅰️</span>Assist<small>Umpan gol</small></button>
+            <button class="action" data-action="save"><span>🧤</span>Save kiper<small>Tangkapan / tepisan</small></button>
+            <button class="action" data-action="interception"><span>✋</span>Intersep<small>Memotong umpan</small></button>
+            <button class="action" data-action="duel_win"><span>💪</span>Duel menang<small>Duel dimenangkan</small></button>
+            <button class="action" data-action="tackle"><span>🛡️</span>Tackle sukses<small>Merebut bola</small></button>
+            <button class="action" data-action="dribble"><span>〰️</span>Dribel sukses<small>Melewati lawan</small></button>
+          </div>
+          <p class="notice" style="margin-top:12px">Akurasi passing = passing berhasil ÷ (berhasil + gagal) × 100%. Pilih pemain terlebih dahulu agar aksi tercatat ke profil yang benar.</p>
+        </div>
+      </div>
+      <div>
+        <div class="panel"><div class="row"><h2>Statistik langsung</h2><span class="badge">LIVE</span></div><p class="hint" id="liveSubtitle">Pilih pemain untuk melihat statistik.</p><div id="liveMetrics" class="metrics"><div class="empty">Belum ada pemain dipilih.</div></div></div>
+        <div class="panel"><div class="row"><h2>Log aksi terbaru</h2><button class="outline smallbtn" id="undoBtn">Urungkan</button></div><p class="hint">Aksi diurutkan dari yang terbaru.</p><div id="eventLog"></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="page-players" class="hidden">
+    <div class="panel"><h2>Tambah pemain</h2><p class="hint">Data pemain milik SSB atau tim tarkam.</p>
+      <div class="grid">
+        <div class="field"><label for="playerName">Nama lengkap *</label><input id="playerName" placeholder="Nama pemain"></div>
+        <div class="field"><label for="playerPosition">Posisi</label><select id="playerPosition"><option>GK</option><option>CB</option><option>FB</option><option>DM</option><option>CM</option><option>AM</option><option>Winger</option><option>ST</option></select></div>
+        <div class="field"><label for="playerTeam">Tim / SSB</label><input id="playerTeam" placeholder="Nama klub atau SSB"></div>
+        <div class="field"><label for="playerAge">Usia</label><input id="playerAge" type="number" min="5" max="70" value="16"></div>
+        <div class="field"><label for="playerNumber">Nomor punggung</label><input id="playerNumber" type="number" min="0" max="99"></div>
+        <div class="field"><label for="playerFoot">Kaki dominan</label><select id="playerFoot"><option>Kanan</option><option>Kiri</option><option>Keduanya</option></select></div>
+        <div class="field wide"><button id="addPlayer" style="width:100%">Simpan pemain</button></div>
+      </div>
+    </div>
+    <div class="panel"><div class="row"><h2>Daftar pemain</h2><span class="badge" id="playerCount">0 pemain</span></div><input id="searchPlayers" placeholder="Cari nama atau tim..." style="margin-bottom:10px"><div id="playerList"></div></div>
+  </section>
+
+  <section id="page-stats" class="hidden">
+    <div class="fifa-shell">
+      <div class="fifa-head"><div><div class="fifa-kicker">ScoutPro • Player Hub</div><h2>PLAYER PERFORMANCE</h2><p>Match insights · Performance overview</p></div><span class="fifa-chip">LIVE DATA</span></div>
+      <select id="fifaPlayerSelect" class="fifa-select" aria-label="Pilih pemain untuk melihat statistik"><option value="">Pilih pemain...</option></select>
+      <div id="fifaPlayerDashboard"><div class="fifa-empty">Tambahkan pemain dan catat aksi pertandingan untuk melihat kartu statistik.</div></div>
+    </div>
+    <div class="panel"><div class="row"><h2>Top performers</h2><span class="badge">Scout ranking</span></div><p class="hint">Peringkat indikatif dari aksi tercatat, bukan rating resmi FIFA atau hasil TOPSIS.</p><div id="rankingPreview"></div></div>
+    <div class="panel"><h2>Ekspor data</h2><p class="hint">Unduh data pemain dan aksi sebagai CSV untuk backup atau analisis.</p><div class="grid"><button id="exportPlayers">Ekspor pemain CSV</button><button class="secondary" id="exportEvents">Ekspor aksi CSV</button></div></div>
+    <div id="overallMetrics" class="hidden"></div>
+  </section>
+
+  <section id="page-settings" class="hidden">
+    <div class="panel"><h2>Akun ScoutPro</h2><p class="hint">Masuk dengan email dan kata sandi Supabase Auth. Gunakan akun yang sama di semua perangkat agar data terlihat bersama.</p><div style="margin-bottom:10px"><label for="authEmail">Email</label><input id="authEmail" type="email" autocomplete="username" placeholder="email@contoh.com"></div><div style="margin-bottom:10px"><label for="authPassword">Kata sandi</label><input id="authPassword" type="password" autocomplete="current-password" placeholder="Kata sandi akun Supabase"></div><div class="grid"><button id="signInBtn">Masuk</button><button class="secondary" id="signUpBtn">Daftar akun</button></div><button class="outline" id="signOutBtn" style="margin-top:8px;width:100%">Keluar</button><p id="authStatus" class="onlinehint">Belum masuk.</p></div>
+    <div class="panel"><h2>Status sinkronisasi</h2><p class="hint">Sinkronisasi online membutuhkan koneksi dan login. Data lokal akan dicoba dikirim setelah masuk.</p><div id="connectionCard" class="notice">Belum dikonfigurasi ke backend. Data saat ini tersimpan pada browser/perangkat ini saja.</div></div>
+    <div class="panel"><h2>Hubungkan Supabase</h2><p class="hint">Isi URL proyek dan anon/publishable key dari dashboard Supabase. Jangan pernah memasukkan service_role key ke aplikasi browser.</p>
+      <div style="margin-bottom:12px"><label for="supabaseUrl">Project URL</label><input id="supabaseUrl" placeholder="https://xxxx.supabase.co"></div>
+      <div style="margin-bottom:12px"><label for="supabaseKey">Publishable / anon key</label><input id="supabaseKey" placeholder="sb_publishable_... atau anon key"></div>
+      <div class="grid"><button id="saveConfig">Simpan konfigurasi</button><button class="secondary" id="testConnection">Uji koneksi</button></div>
+      <p class="onlinehint" style="margin-top:12px">Gunakan hanya publishable/anon key, bukan service_role. Jalankan file schema.sql versi paket ini di SQL Editor sebelum login.</p>
+    </div>
+    <div class="panel"><h2>Backup dan reset</h2><div class="grid"><button class="secondary" id="backupAll">Unduh backup JSON</button><button class="outline" id="resetLocal">Hapus data lokal</button></div></div>
+  </section>
+</main>
+<nav class="bottomnav" aria-label="Navigasi bawah">
+  <button class="active" data-page="record"><span>⚽</span>Catat</button><button data-page="players"><span>♙</span>Pemain</button><button data-page="stats"><span>▥</span>Statistik</button><button data-page="settings"><span>⚙</span>Koneksi</button>
+</nav>
+<div id="toast" class="toast hidden" role="status"></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="app.js"></script>
+</body></html>

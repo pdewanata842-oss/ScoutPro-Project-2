@@ -1,0 +1,16 @@
+{
+  "id": "./",
+  "name": "ScoutPro Football Scouting Analytics",
+  "short_name": "ScoutPro",
+  "description": "Pencatatan dan analitik performa pemain SSB dan tim tarkam.",
+  "lang": "id-ID",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#f2f6f4",
+  "theme_color": "#102b28",
+  "icons": [
+    {"src":"assets/icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}
+  ]
+}
